@@ -53,11 +53,6 @@ cd finance-frontend
 npm install
 ```
 
-2. Copy the example environment file and configure the backend URL:
-
-```bash
-cp .env.example .env
-```
 
 3. Start the frontend:
 
