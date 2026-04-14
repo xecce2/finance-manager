@@ -1,12 +1,23 @@
 from fastapi import FastAPI, Depends, HTTPException
 from sqlalchemy.orm import Session
-import crud  
+from fastapi.middleware.cors import CORSMiddleware
+import crud
 import models
 import schemas
 import database
 
 app = FastAPI()
 
+# Настройка CORS — разрешает фронтенду на порту 3000 получать данные от этого бэкенда
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:3000"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+# Зависимость для получения сессии базы данных
 def get_db():
     db = database.SessionLocal()
     try:
@@ -14,6 +25,7 @@ def get_db():
     finally:
         db.close()
 
+# Создание таблиц при запуске приложения
 @app.on_event("startup")
 def on_startup():
     models.Base.metadata.create_all(bind=database.engine)
@@ -29,3 +41,16 @@ def get_transactions(skip: int = 0, limit: int = 100, db: Session = Depends(get_
 @app.post("/transactions/", response_model=schemas.Transaction)
 def create_transaction(transaction: schemas.TransactionCreate, db: Session = Depends(get_db)):
     return crud.create_transaction(db, transaction)
+
+
+@app.post("/transactions/", response_model=schemas.Transaction)
+@app.post("/transactions/", response_model=schemas.Transaction)
+def create_transaction(transaction: schemas.TransactionCreate, db: Session = Depends(get_db)):
+    return crud.create_transaction(db, transaction)
+
+@app.delete("/transactions/{transaction_id}")
+def delete_transaction(transaction_id: int, db: Session = Depends(get_db)):
+    success = crud.delete_transaction(db, transaction_id)
+    if not success:
+        raise HTTPException(status_code=404, detail="Transaction not found")
+    return {"message": "Successfully deleted"}

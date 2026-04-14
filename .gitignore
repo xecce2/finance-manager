@@ -1,0 +1,38 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyo
+*.pyd
+.pytest_cache/
+.python-version
+.env
+.env.*
+.venv/
+venv/
+PYTHONPATH
+coverage.xml
+htmlcov/
+.tox/
+celerybeat-schedule
+instance/
+.webassets-cache
+*.sqlite3
+test.db
+
+# FastAPI / Uvicorn
+*.log
+
+# node / React frontend
+finance-frontend/node_modules/
+finance-frontend/build/
+finance-frontend/.env
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDEs
+.vscode/
+.idea/
+*__pycache__*
