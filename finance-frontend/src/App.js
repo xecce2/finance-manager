@@ -13,10 +13,8 @@ export default function App() {
   const [activeTab, setActiveTab] = useState('dashboard');
   const [error, setError] = useState(null);
 
-  // Используем useCallback, чтобы функцию можно было безопасно передавать в дочерние компоненты
   const fetchData = useCallback(async () => {
     try {
-      // setLoading(true); // Убираем принудительный лоадер при каждом обновлении, чтобы экран не мигал
       const [txRes, catRes] = await Promise.all([
         getTransactions(),
         getCategories(),
@@ -40,14 +38,13 @@ export default function App() {
   const handleAddTransaction = async (data) => {
     try {
       await createTransaction(data);
-      await fetchData(); // Обновляем данные после добавления
+      await fetchData();
       setShowModal(false);
     } catch (err) {
       alert("Ошибка при сохранении транзакции");
     }
   };
 
-  // Расчеты
   const totalIncome = transactions?.filter((t) => t.amount > 0)
     .reduce((sum, t) => sum + t.amount, 0) || 0;
 
@@ -126,7 +123,7 @@ export default function App() {
               <TransactionList
                 transactions={transactions}
                 categories={categories}
-                onRefresh={fetchData} // ВАЖНО: передаем функцию обновления
+                onRefresh={fetchData}
               />
             )}
           </div>

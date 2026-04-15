@@ -13,7 +13,6 @@ def get_transactions(db: Session, skip: int = 0, limit: int = 100):
 
 
 def create_transaction(db: Session, transaction: schemas.TransactionCreate):
-    # 1. Поиск или создание категории
     db_category = db.query(models.Category).filter(models.Category.name == transaction.category_name).first()
     if not db_category:
         db_category = models.Category(name=transaction.category_name)
@@ -21,10 +20,8 @@ def create_transaction(db: Session, transaction: schemas.TransactionCreate):
         db.commit()
         db.refresh(db_category)
 
-    # 2. Конвертация даты из строки в объект
     transaction_date = datetime.strptime(transaction.date, "%Y-%m-%d").date()
 
-    # 3. Создание записи
     db_transaction = models.Transaction(
         amount=transaction.amount,
         description=transaction.description,

@@ -8,7 +8,6 @@ import database
 
 app = FastAPI()
 
-# Настройка CORS — разрешает фронтенду на порту 3000 получать данные от этого бэкенда
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["http://localhost:3000"],
@@ -17,7 +16,6 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Зависимость для получения сессии базы данных
 def get_db():
     db = database.SessionLocal()
     try:
@@ -25,7 +23,6 @@ def get_db():
     finally:
         db.close()
 
-# Создание таблиц при запуске приложения
 @app.on_event("startup")
 def on_startup():
     models.Base.metadata.create_all(bind=database.engine)

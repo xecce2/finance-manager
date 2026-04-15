@@ -6,14 +6,12 @@ export default function TransactionList({ transactions, categories, onRefresh })
   const [filterCat, setFilterCat] = useState('');
   const [sortDir, setSortDir] = useState('desc');
 
-  // Создаем словарь { id: "Name" } для быстрого поиска
   const categoryMap = useMemo(() => {
     const map = {};
     categories?.forEach((c) => (map[c.id] = c.name));
     return map;
   }, [categories]);
 
-  // Фильтрация и сортировка данных
   const filtered = useMemo(() => {
     if (!transactions) return [];
     
@@ -32,12 +30,11 @@ export default function TransactionList({ transactions, categories, onRefresh })
       });
   }, [transactions, search, filterCat, sortDir]);
 
-  // Обработчик удаления
   const handleDelete = async (id) => {
     if (window.confirm("Are you sure you want to delete this transaction?")) {
       try {
         await deleteTransaction(id);
-        if (onRefresh) onRefresh(); // Обновляем список в App.js
+        if (onRefresh) onRefresh(); 
       } catch (err) {
         console.error("Delete error:", err);
         alert("Failed to delete transaction. Is the backend running?");
